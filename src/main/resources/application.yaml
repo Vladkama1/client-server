@@ -1,0 +1,41 @@
+server:
+  port: ${CLIENT_SERVER_PORT:8080}
+
+spring:
+  application.name: client-server
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+  instance:
+    hostname: ${CLIENT_SERVER_HOST:localhost}
+    preferIpAddress: true
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}-${random.value}}
+    leaseRenewalIntervalInSeconds: 30
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    prometheus:
+      enabled=true:
+  metrics:
+    export:
+      prometheus:
+        enabled=true:
+
+logging:
+  level:
+    com:
+      local:
+        resource-service: TRACE
+    org:
+      springframework:
+        orm:
+          jpa: TRACE
+          jpa.JpaTransactionManager: DEBUG
+          transaction: INFO
+          transaction.interceptor: TRACE

@@ -11,7 +11,7 @@ public class HelloController {
     @GetMapping("/hello")
     public String hello() {
         log.info("Вызов метода /hello в client server (java)");
-        return "Checking the service java discovery server";
+        return "Checking the service java client server";
     }
 
 }

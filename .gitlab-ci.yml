@@ -1,0 +1,51 @@
+include:
+  - project: "Laboratory/Evergreen/DevOpsRepo"
+    ref: main
+    file:
+      - "Templates/tests-jacoco-template.yml"
+      - "Templates/tests-sonar-template.yml"
+      - "Templates/kaniko-build-template.yml"
+
+
+stages:
+  - test
+  - build
+  - deploy
+
+Tests:
+  stage: test
+  extends: .test-jacoco
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+
+Tests:sonarqube:
+  stage: test
+  extends: .test-sonar
+  needs:
+    - job: Tests
+      artifacts: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+
+Build:
+  stage: build
+  variables:
+    IMAGE_NAME: ${CI_PROJECT_NAME}
+  extends: .kaniko_build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == "develop"
+
+deploy:
+  stage: deploy
+  image: 
+    name: alpine/k8s:1.25.13
+    entrypoint: [""]
+  script:
+    - kubectl config get-contexts
+    - mkdir -p /root/.kube
+    - echo "${KUBE_CONFIG}" > /root/.kube/config
+    - chmod 600 /root/.kube/config
+    - kubectl config get-contexts
+    - kubectl apply -f ./k8s/ -n dev
+  only:
+    - develop

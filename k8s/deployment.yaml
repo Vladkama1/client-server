@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-server
+  namespace: dev
+  labels:
+    app: client-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: client-server
+  template:
+    metadata:
+      labels:
+        app: client-server
+    spec:
+      containers:
+        - name: client-server
+          image: cr.yandex/crpqhm9qhte79o09rkl7/client-server/client-server:develop
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          imagePullPolicy: Always
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          resources: {}
+          env:
+            - name: CLIENT_SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: client-config         
+                  key: CLIENT_SERVER_PORT
+
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: yandex
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 25%

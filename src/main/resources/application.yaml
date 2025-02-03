@@ -3,16 +3,24 @@ server:
 
 spring:
   application.name: client-server
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
-  instance:
-    hostname: ${CLIENT_SERVER_HOST:localhost}
-    preferIpAddress: true
-    instanceId: ${spring.application.name}:${spring.application.instance_id:${server.port}-${random.value}}
-    leaseRenewalIntervalInSeconds: 30
+  cloud:
+    kubernetes:
+      loadbalancer:
+        mode: service
+      discovery:
+        enabled: true
+      reload:
+        enabled: true
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 management:
   endpoints:

@@ -45,6 +45,15 @@ dependencies {
   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
   implementation 'org.springframework.boot:spring-boot-starter-logging'
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+  implementation "org.liquibase:liquibase-core:4.28.0"
+  implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.28'
+  implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.3.8'
+  implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+  annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+  //implementation("net.lbruun.springboot:preliquibase-spring-boot-starter")
+
 }
 
 dependencyManagement {

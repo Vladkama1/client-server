@@ -32,7 +32,31 @@ spec:
                 configMapKeyRef:
                   name: client-config         
                   key: CLIENT_SERVER_PORT
-
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgresql-config
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgresql-config
+                  key: POSTGRES_PORT
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: client-postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: client-postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: client-postgres-secret
+                  key: POSTGRES_PASSWORD
       restartPolicy: Always
       imagePullSecrets:
         - name: yandex

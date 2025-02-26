@@ -1,0 +1,226 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_business_volume
+      author: Vladislav L.
+      changes:
+        - createTable:
+            tableName: business_volume
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: category
+                  type: varchar(50)
+                  constraints:
+                    checkConstraint: "category ~ '^[А-ЯЁа-яё]+$'"
+
+  - changeSet:
+      id: create_client_representativ
+      author: Vladislav L.
+      changes:
+        - createTable:
+            tableName: client_representativ
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: full_name
+                  type: varchar(100)
+                  constraints:
+                    checkConstraint: "full_name ~ '^[А-ЯЁа-яё\\-]+$'"
+              - column:
+                  name: job_title
+                  type: varchar(100)
+                  constraints:
+                    checkConstraint: "job_title ~ '^[А-ЯЁа-яё\\-]+$'"
+              - column:
+                  name: email
+                  type: varchar(100)
+                  constraints:
+                    checkConstraint: "email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$'"
+
+  - changeSet:
+      id: create_form_ownership
+      author: Vladislav L.
+      changes:
+        - createTable:
+            tableName: form_ownership
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: full_name
+                  type: varchar(50)
+                  constraints:
+                    checkConstraint: "full_name ~ '^[А-ЯЁа-яё\\-,\\./]+$'"
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    checkConstraint: "name ~ '^[А-ЯЁа-яё\\-,\\./]+$'"
+
+  - changeSet:
+      id: create_okved
+      author: Vladislav L.
+      changes:
+        - createTable:
+            tableName: okved
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: code
+                  type: varchar(100)
+                  constraints:
+                    checkConstraint: "code ~ '^[0-9]+$'"
+              - column:
+                  name: name
+                  type: varchar(100)
+                  constraints:
+                    checkConstraint: "name ~ '^[А-ЯЁа-яё\\-,\\./]+$'"
+
+  - changeSet:
+      id: create_tel_number
+      author: Vladislav L.
+      changes:
+        - createTable:
+            tableName: tel_number
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: number
+                  type: varchar(100)
+                  constraints:
+                    checkConstraint: "number ~ '^[0-9]+$'"
+              - column:
+                  name: client_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+
+
+  - changeSet:
+      id: create_client
+      author: Vladislav L.
+      changes:
+        - createTable:
+            tableName: client
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: inn
+                  type: decimal(19, 2)
+              - column:
+                  name: ogrn
+                  type: decimal(19, 2)
+              - column:
+                  name: form_ownership_id
+                  type: UUID
+                  constraints:
+                      nullable: false
+                      foreignKeyName: form_ownership_id
+                      references: form_ownership(id)
+              - column:
+                  name: full_name_client
+                  type: varchar(50)
+                  constraints:
+                    checkConstraint: "full_name_client ~ '^[А-ЯЁа-яё\\-,\\./]+$'"
+              - column:
+                  name: name_client
+                  type: varchar(50)
+                  constraints:
+                    checkConstraint: "name_client ~ '^[А-ЯЁа-яё\\-,\\./]+$'"
+              - column:
+                  name: okved_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: okved_id
+                    references: okved(id)
+              - column:
+                  name: business_vol_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: business_vol_id
+                    references: business_volume(id)
+              - column:
+                  name: cur_acc_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address_legal
+                  type: varchar(200)
+                  constraints:
+                    checkConstraint: "address_legal ~ '^[А-ЯЁа-яё\\-,\\./]+$'"
+              - column:
+                  name: client_representativ_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: client_representativ_id
+                    references: client_representativ(id)
+              - column:
+                  name: manager_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: revenue
+                  type: decimal(19, 2)
+              - column:
+                  name: start_date
+                  type: timestamp
+              - column:
+                  name: updated_at
+                  type: timestamp
+              - column:
+                  name: employee_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: timestamp
+              - column:
+                  name: is_active
+                  type: boolean
+
+
+  - changeSet:
+      id: create_personal_data_fk
+      author: Vladislav L.
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: FK_TEL_NUMBER_CLIENT_ID
+            baseTableName: TEL_NUMBER
+            baseColumnNames: ID
+            referencedTableName: CLIENT
+            referencedColumnNames: ID

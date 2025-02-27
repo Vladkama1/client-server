@@ -12,6 +12,9 @@ import java.util.UUID;
 public interface ClientRepository extends JpaRepository<Client, UUID> {
 
     @EntityGraph(value = "Client.fullInfo",type = EntityGraph.EntityGraphType.LOAD)
+    Optional<Client> findByInnAndOgrn(Long inn, Long ogrn);
+
+    @EntityGraph(value = "Client.fullInfo",type = EntityGraph.EntityGraphType.LOAD)
     @Override
     Optional<Client> findById(UUID uuid);
 }

@@ -16,8 +16,12 @@ import aston.lab.clientserver.dto.ResponseClientDto;
 import aston.lab.clientserver.exception.NotFoundException;
 import aston.lab.clientserver.mapper.ClientMapper;
 import aston.lab.clientserver.mapper.TelNumberMapper;
+import aston.lab.clientserver.dto.responsedto.ClientFindByInnAndOgrnResponseDto;
+import aston.lab.clientserver.exception.CheckValidationException;
+import aston.lab.clientserver.exception.ClientNotFoundException;
 import aston.lab.clientserver.service.ClientService;
 import aston.lab.clientserver.service.TelNumberService;
+import aston.lab.clientserver.service.converter.ClientConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +42,8 @@ public class ClientServiceImpl implements ClientService {
     private final OkvedRepository okvedRepository;
     private final ClientMapper clientMapper;
     private final TelNumberMapper telNumberMapper;
+    private final ClientConverter clientConverter;
+
 
     @Override
     @Transactional
@@ -71,5 +77,27 @@ public class ClientServiceImpl implements ClientService {
         List<TelNumber> telNumberList = telNumberMapper.toListEntity(client, telNumbers);
         log.info("telNumberList: {}", telNumberList.get(0));
         return telNumberList.stream().map(telNumberService::saveTelNumber).toList();
+    }
+
+    @Override
+    public ClientFindByInnAndOgrnResponseDto findClientByInnAndOgrn(Long inn, Long ogrn) {
+
+        checkValidationInnAndOrgn(inn, ogrn);
+
+        Client client = clientRepository.findByInnAndOgrn(inn, ogrn)
+                .orElseThrow(() -> new ClientNotFoundException("Клиент не найден"));
+        log.info("Client is found: {}", client);
+        return clientConverter.clientFindByInnAndOgrnResponseDto(client);
+    }
+
+    private void checkValidationInnAndOrgn(Long inn, Long ogrn) {
+
+        int innLength = String.valueOf(inn).length();
+
+        int ogrnLength = String.valueOf(ogrn).length();
+
+        if ((innLength != 10 && innLength != 12) || (ogrnLength != 13 && ogrnLength != 15)) {
+            throw new CheckValidationException("Неверные параметры запроса");
+        }
     }
 }

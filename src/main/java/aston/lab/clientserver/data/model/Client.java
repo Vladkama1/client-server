@@ -48,10 +48,10 @@ public class Client {
     private UUID id;
 
     @Column(name = "inn")
-    private Long inn;
+    private String inn;
 
     @Column(name = "ogrn")
-    private Long ogrn;
+    private String ogrn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "form_ownership_id", referencedColumnName = "id", nullable = false)
@@ -72,7 +72,7 @@ public class Client {
     private BusinessVolume businessVolId;
 
     @Column(name = "cur_acc_id")
-    private UUID curAccId;
+    private String curAccId;
 
     @Column(name = "address_legal")
     private String addressLegal;

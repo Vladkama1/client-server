@@ -172,9 +172,9 @@ databaseChangeLog:
                     references: business_volume(id)
               - column:
                   name: cur_acc_id
-                  type: UUID
+                  type: varchar(100)
                   constraints:
-                    nullable: false
+                    checkConstraint: "length(cur_acc_id) = 20 AND cur_acc_id ~ '^[0-9]+$'"
               - column:
                   name: address_legal
                   type: varchar(200)
@@ -221,6 +221,6 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             constraintName: FK_TEL_NUMBER_CLIENT_ID
             baseTableName: TEL_NUMBER
-            baseColumnNames: ID
+            baseColumnNames: CLIENT_ID
             referencedTableName: CLIENT
             referencedColumnNames: ID

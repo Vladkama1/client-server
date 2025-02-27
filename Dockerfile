@@ -24,7 +24,7 @@ FROM openjdk:17
 WORKDIR /app
 
 # Копируем jar файл из стадии сборки
-COPY --from=builder /app/build/libs/*.jar loanrequest-server.jar
+COPY --from=builder /app/build/libs/*.jar client-server.jar
 
 # Запускаем приложение
-CMD ["java",  "-jar", "loanrequest-server.jar"]
+CMD ["java",  "-jar", "client-server.jar"]

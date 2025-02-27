@@ -1,7 +1,8 @@
 package aston.lab.clientserver.service;
 
-import aston.lab.clientserver.dto.ClientDto;
+import aston.lab.clientserver.dto.RequestClientDto;
+import aston.lab.clientserver.dto.ResponseClientDto;
 
 public interface ClientService {
-    ClientDto saveClient (ClientDto clientDto);
+    ResponseClientDto saveClient (RequestClientDto requestClientDto, String requestEmployeeId);
 }

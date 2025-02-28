@@ -17,9 +17,9 @@ public interface ClientMapper {
     Client toEntity(RequestClientDto dto);
 
 
-    @Mapping(source = "client.formOwnershipId.id", target = "formOwnershipId")
-    @Mapping(source = "client.okvedId.id", target = "okvedId")
-    @Mapping(source = "client.businessVolId.id", target = "businessVolId")
-    @Mapping(source = "client.clientRepresentativId.id", target = "clientRepresentativId")
+    @Mapping(source = "formOwnershipId.id", target = "formOwnershipId")
+    @Mapping(source = "okvedId.id", target = "okvedId")
+    @Mapping(source = "businessVolId.id", target = "businessVolId")
+    @Mapping(source = "clientRepresentativId.id", target = "clientRepresentativId")
     ResponseClientDto toDto(Client client);
 }

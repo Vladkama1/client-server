@@ -21,6 +21,7 @@ import aston.lab.clientserver.mapper.ClientMapper;
 import aston.lab.clientserver.mapper.TelNumberMapper;
 import aston.lab.clientserver.service.TelNumberService;
 import aston.lab.clientserver.service.converter.ClientConverter;
+import aston.lab.clientserver.util.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,18 +68,6 @@ class ClientServiceImplTest {
     @Mock
     private ClientConverter clientConverterMock;
 
-    private final ClientFindByInnAndOgrnResponseDto responseDto = ClientFindByInnAndOgrnResponseDto.builder()
-            .fullNameClient("Общество с ограниченной ответственностью ИнструментТекстиль")
-            .nameClient("ООО ИнструментТекстиль")
-            .inn(6321322525L)
-            .ogrn(1136320021512L)
-            .build();
-    private final Client client = Client.builder()
-            .nameClient("ООО ИнструментТекстиль")
-            .fullNameClient("Общество с ограниченной ответственностью ИнструментТекстиль")
-            .inn(6321322525L)
-            .ogrn(1136320021512L)
-            .build();
 
     @Test
     @DisplayName("Тест на успешное создание клиента")
@@ -134,13 +123,13 @@ class ClientServiceImplTest {
 
         long inn = 6321322525L;
         long ogrn = 1136320021512L;
-        Optional<Client> clientOptional = Optional.of(client);
-        when(clientConverterMock.clientFindByInnAndOgrnResponseDto(client)).thenReturn(responseDto);
+        Optional<Client> clientOptional = Optional.of(TestUtils.client);
+        when(clientConverterMock.clientFindByInnAndOgrnResponseDto(TestUtils.client)).thenReturn(TestUtils.responsesDto);
         when(clientRepository.findByInnAndOgrn(inn, ogrn)).thenReturn(clientOptional);
 
         ClientFindByInnAndOgrnResponseDto findClient = clientService.findClientByInnAndOgrn(inn, ogrn);
 
-        assertEquals(responseDto, findClient);
+        assertEquals(TestUtils.responsesDto, findClient);
         verify(clientRepository, times(1)).findByInnAndOgrn(inn, ogrn);
     }
 

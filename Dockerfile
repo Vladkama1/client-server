@@ -1,4 +1,4 @@
-# Используем Gradle с JDK 
+# Используем Gradle с JDK для стадии сборки
 FROM gradle:8.11.1-jdk17 AS builder
 
 WORKDIR /app
@@ -15,10 +15,10 @@ RUN chmod +x ./gradlew
 # Проверяем Java-версию для отладки
 RUN java -version
 
-# Запускаем сборку проекта через Gradle Wrapper
-RUN ./gradlew bootJar && ls -lah build/libs
+# Запускаем сборку проекта через Gradle Wrapper без демона
+RUN ./gradlew --no-daemon bootJar && ls -lah build/libs
 
-# Создаём финальный образ с JDK 
+# Создаем финальный образ с JDK
 FROM openjdk:17
 
 WORKDIR /app
@@ -27,4 +27,4 @@ WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar client-server.jar
 
 # Запускаем приложение
-CMD ["java",  "-jar", "client-server.jar"]
+CMD ["java", "-jar", "client-server.jar"]

@@ -31,10 +31,11 @@ public class TelNumber {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "number")
+    @Column(name = "number", length = 11, nullable = false)
     private String number;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
     private Client clientId;
+
 }

@@ -143,9 +143,9 @@ databaseChangeLog:
                   name: form_ownership_id
                   type: UUID
                   constraints:
-                      nullable: false
-                      foreignKeyName: form_ownership_id
-                      references: form_ownership(id)
+                    nullable: false
+                    foreignKeyName: form_ownership_id
+                    references: form_ownership(id)
               - column:
                   name: full_name_client
                   type: varchar(50)
@@ -224,3 +224,28 @@ databaseChangeLog:
             baseColumnNames: ID
             referencedTableName: CLIENT
             referencedColumnNames: ID
+
+
+  # Новый changeSet для изменения колонок
+  - changeSet:
+      id: alter_client_update_columns
+      author: Irina Orlova
+      changes:
+        - sql:
+            sql: | 
+              ALTER TABLE client
+              ALTER COLUMN inn TYPE varchar(12), 
+              ADD CONSTRAINT chk_inn_format CHECK (inn ~ '^[0-9]{10}$|^[0-9]{12}$'), 
+              ALTER COLUMN inn SET NOT NULL
+        - sql:
+            sql: |
+              ALTER TABLE client 
+              ALTER COLUMN ogrn TYPE varchar(15), 
+              ADD CONSTRAINT chk_ogrn_format CHECK (ogrn ~ '^[0-9]{13}$|^[0-9]{15}$'), 
+              ALTER COLUMN ogrn SET NOT NULL
+        - sql:
+            sql: | 
+              ALTER TABLE client 
+              ALTER COLUMN cur_acc_id TYPE varchar(20), 
+              ADD CONSTRAINT chk_cur_acc_id_format CHECK (cur_acc_id ~ '^[0-9]{20}$'), 
+              ALTER COLUMN cur_acc_id SET NOT NULL

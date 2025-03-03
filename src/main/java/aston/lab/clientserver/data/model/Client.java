@@ -3,9 +3,11 @@ package aston.lab.clientserver.data.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -47,11 +49,11 @@ public class Client {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "inn")
-    private Long inn;
+    @Column(name = "inn", length = 12, nullable = false)
+    private String inn;
 
-    @Column(name = "ogrn")
-    private Long ogrn;
+    @Column(name = "ogrn", length = 15, nullable = false)
+    private String ogrn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "form_ownership_id", referencedColumnName = "id", nullable = false)
@@ -71,8 +73,8 @@ public class Client {
     @JoinColumn(name = "business_vol_id", referencedColumnName = "id", nullable = false)
     private BusinessVolume businessVolId;
 
-    @Column(name = "cur_acc_id")
-    private UUID curAccId;
+    @Column(name = "cur_acc_id", length = 20, nullable = false)
+    private String curAccId;
 
     @Column(name = "address_legal")
     private String addressLegal;

@@ -21,10 +21,10 @@ public class ClientFindByInnAndOgrnResponseDto {
     private String fullNameClient;
 
     @Schema(description = "ИНН клиента", example = "6321323773")
-    private Long inn;
+    private String inn;
 
     @Schema(description = "ОГРН Клиента", example = "1136320021200")
-    private Long ogrn;
+    private String ogrn;
 
     @Schema(description = "Сокращенное имя клиента", example = "ООО ИТекстиль")
     private String nameClient;

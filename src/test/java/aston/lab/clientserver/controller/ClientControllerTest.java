@@ -48,15 +48,15 @@ public class ClientControllerTest {
             .telNumber(List.of("+12345678912", "+98765432198"))
             .managerId(UUID.fromString("f40b55ab-f9ce-488b-8d36-3615b2599487"))
             .isActive(true)
-            .inn(6321322525L)
-            .ogrn(1136320021512L)
+            .inn("6321322525")
+            .ogrn("1136320021512")
             .build();
 
     @Test
     @DisplayName("Тест на успешный поиск по ИНН и ОГРН")
     void testfindClientByInnAndOgrn() throws Exception {
-        long inn = 6321322525L;
-        long ogrn = 1136320021512L;
+        String inn = "6321322525";
+        String ogrn = "1136320021512";
 
         Mockito.when(clientService.findClientByInnAndOgrn(inn, ogrn)).thenReturn(responseDto);
 
@@ -71,8 +71,8 @@ public class ClientControllerTest {
     @Test
     @DisplayName("Тест если клиент не найден ")
     void testNotFoundClientFailure() throws Exception {
-        long wrongInn = 6321322526L;
-        long ogrn = 1136320021512L;
+        String wrongInn = "6321322526";
+        String ogrn = "1136320021512";
 
         doThrow(new ClientNotFoundException())
                 .when(clientService).findClientByInnAndOgrn(wrongInn, ogrn);
@@ -88,8 +88,8 @@ public class ClientControllerTest {
     @Test
     @DisplayName("Тест если неверные параметры запроса")
     void testNotValidClientFailure() throws Exception {
-        long wrongInn = 63213225258L;
-        long ogrn = 1136320021512L;
+        String wrongInn = "63213225258";
+        String ogrn = "1136320021512";
 
         doThrow(new CheckValidationException())
                 .when(clientService).findClientByInnAndOgrn(wrongInn, ogrn);

@@ -35,14 +35,14 @@ class ClientServiceImplTest {
     private final ClientFindByInnAndOgrnResponseDto responseDto = ClientFindByInnAndOgrnResponseDto.builder()
             .fullNameClient("Общество с ограниченной ответственностью ИнструментТекстиль")
             .nameClient("ООО ИнструментТекстиль")
-            .inn(6321322525L)
-            .ogrn(1136320021512L)
+            .inn("6321322525")
+            .ogrn("1136320021512")
             .build();
     private final Client client = Client.builder()
             .nameClient("ООО ИнструментТекстиль")
             .fullNameClient("Общество с ограниченной ответственностью ИнструментТекстиль")
-            .inn(6321322525L)
-            .ogrn(1136320021512L)
+            .inn("6321322525")
+            .ogrn("1136320021512")
             .build();
 
 
@@ -50,8 +50,8 @@ class ClientServiceImplTest {
     @DisplayName("Тест успешного нахождения клиента по ИНН и ОГРН")
     void testFindByInnAndOgrnClientSuccess() {
 
-        long inn = 6321322525L;
-        long ogrn = 1136320021512L;
+        String inn = "6321322525";
+        String ogrn = "1136320021512";
         Optional<Client> clientOptional = Optional.of(client);
         when(clientConverterMock.clientFindByInnAndOgrnResponseDto(client)).thenReturn(responseDto);
         when(clientRepository.findByInnAndOgrn(inn, ogrn)).thenReturn(clientOptional);
@@ -65,8 +65,8 @@ class ClientServiceImplTest {
     @Test
     @DisplayName("Тест ошибки где клиент не найден")
     void testNotFoundClientFailure() {
-        long wrongInn = 6321322526L;
-        long ogrn = 1136320021512L;
+        String wrongInn = "6321322526";
+        String ogrn = "1136320021512";
         doThrow(new ClientNotFoundException("Клиент не найден"))
                 .when(clientRepository).findByInnAndOgrn(wrongInn, ogrn);
 
@@ -77,8 +77,8 @@ class ClientServiceImplTest {
     @Test
     @DisplayName("Тест ошибки ввода некорректных данных")
     void testNotValidClientFailure() {
-        long wrongInn = 63213225252L;
-        long ogrn = 1136320021512L;
+        String wrongInn = "63213225252";
+        String ogrn = "1136320021512";
         assertThrows(CheckValidationException.class, () -> clientServiceImpl.findClientByInnAndOgrn(wrongInn, ogrn));
     }
 }

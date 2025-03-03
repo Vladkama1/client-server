@@ -28,9 +28,10 @@ public class Okved{
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "code")
+    @Column(name = "code", length = 15, nullable = false)
     private String code;
 
     @Column(name = "name")
     private String name;
+
 }

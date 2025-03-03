@@ -1,5 +1,7 @@
 package aston.lab.clientserver.controller;
 
+import aston.lab.clientserver.dto.request.ActivationStatusRequest;
+import aston.lab.clientserver.dto.response.ActivationStatusResponse;
 import aston.lab.clientserver.dto.responsedto.ClientFindByInnAndOgrnResponseDto;
 import aston.lab.clientserver.exception.CheckValidationException;
 import aston.lab.clientserver.exception.ClientNotFoundException;
@@ -9,10 +11,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/client/v1.0/")
 @RequiredArgsConstructor
 public class ClientController {
+
     private final ClientService clientService;
 
     @Operation(
@@ -31,15 +37,16 @@ public class ClientController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Клиент найден",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClientFindByInnAndOgrnResponseDto.class))),
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ClientFindByInnAndOgrnResponseDto.class))),
             @ApiResponse(responseCode = "400", description = "Неверные параметры запроса",
                     content = @Content(mediaType = "application/json", schema = @Schema(type = "string"))),
             @ApiResponse(responseCode = "404", description = "Клиент не найден",
                     content = @Content(mediaType = "application/json", schema = @Schema(type = "string")))
     })
     @GetMapping("search")
-    public ResponseEntity<?> findClientByInnAndOgrn(@RequestParam(name = "inn") Long inn,
-                                                    @RequestParam(name = "ogrn") Long ogrn) {
+    public ResponseEntity<?> findClientByInnAndOgrn(@RequestParam(name = "inn") String inn,
+                                                    @RequestParam(name = "ogrn") String ogrn) {
         try {
             ClientFindByInnAndOgrnResponseDto client = clientService.findClientByInnAndOgrn(inn, ogrn);
             return ResponseEntity.status(HttpStatus.OK).body(client);
@@ -51,4 +58,17 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Клиент не найден");
         }
     }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Статус клиентов успешно обновлен"),
+            @ApiResponse(responseCode = "400", description = "Некорректные параметры запроса"),
+            @ApiResponse(responseCode = "500", description = "Внутренняя ошибка сервера")
+    })
+    @PatchMapping("activation-status")
+    public ResponseEntity<ActivationStatusResponse> updateActivationStatus(
+            @Valid @RequestBody ActivationStatusRequest request) {
+        ActivationStatusResponse response = clientService.updateActivationStatus(request);
+        return ResponseEntity.ok(response);
+    }
+
 }

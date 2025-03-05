@@ -36,6 +36,8 @@ class FormOwnershipControllerTest {
         Mockito.when(formOwnershipService.findAllFormOwnerships()).thenReturn(TestUtils.formOwnershipDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/client/v1.0/clients/formownerships")
+                        .header("X-User-Id", "userId")
+                        .header("X-User-Role", "role")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -53,6 +55,8 @@ class FormOwnershipControllerTest {
                 .when(formOwnershipService).findAllFormOwnerships();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/client/v1.0/clients/formownerships")
+                        .header("X-User-Id", "userId")
+                        .header("X-User-Role", "role")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(print());

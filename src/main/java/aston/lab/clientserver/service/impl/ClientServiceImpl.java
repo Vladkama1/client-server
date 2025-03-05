@@ -38,12 +38,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private void checkValidationInnAndOrgn(String inn, String ogrn) {
+        if (!inn.matches("\\d+") && ogrn.matches("\\d+") ) {
+            throw new CheckValidationException("Неверные параметры запроса");
+        }
 
-        int innLength = String.valueOf(inn).length();
-
-        int ogrnLength = String.valueOf(ogrn).length();
-
-        if ((innLength != 10 && innLength != 12) || (ogrnLength != 13 && ogrnLength != 15)) {
+        if ((inn.length() != 10 && inn.length() != 12) || (ogrn.length() != 13 && ogrn.length() != 15)) {
             throw new CheckValidationException("Неверные параметры запроса");
         }
     }

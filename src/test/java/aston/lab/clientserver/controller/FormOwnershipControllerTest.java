@@ -14,7 +14,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +37,7 @@ class FormOwnershipControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/client/v1.0/clients/formownerships")
                         .header("X-User-Id", "userId")
                         .header("X-User-Role", "role")
-                .accept(MediaType.APPLICATION_JSON))
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -49,10 +48,8 @@ class FormOwnershipControllerTest {
     @DisplayName("Тест на пустой список")
     void testNotFoundAllFormOwnerships() throws Exception {
 
-        Mockito.when(formOwnershipService.findAllFormOwnerships()).thenReturn(TestUtils.EmptyformOwnershipDtoList);
+        Mockito.when(formOwnershipService.findAllFormOwnerships()).thenThrow(new RuntimeException());
 
-        doThrow(new RuntimeException())
-                .when(formOwnershipService).findAllFormOwnerships();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/client/v1.0/clients/formownerships")
                         .header("X-User-Id", "userId")

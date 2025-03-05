@@ -3,7 +3,6 @@ package aston.lab.clientserver.util;
 import aston.lab.clientserver.data.model.FormOwnership;
 import aston.lab.clientserver.dto.response.FormOwnershipDto;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +19,6 @@ public class TestUtils {
                             "Акционерное общество",
                             "АО")
             );
-    public static List<FormOwnershipDto> EmptyformOwnershipDtoList = Collections.emptyList();
 
     public static List<FormOwnership> formOwnershipList =
             List.of(
@@ -35,6 +33,5 @@ public class TestUtils {
                             "АО")
             );
 
-    public static List<FormOwnership> EmptyformOwnershipList =Collections.emptyList();
 
 }

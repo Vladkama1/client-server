@@ -11,15 +11,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 @ExtendWith(MockitoExtension.class)
 class FormOwnershipServiceImplTest {
     @Mock
@@ -37,19 +35,17 @@ class FormOwnershipServiceImplTest {
         List<FormOwnershipDto> formOwnershipDtos = formOwnershipServiceImpl.findAllFormOwnerships();
 
         assertEquals(TestUtils.formOwnershipList.size(), formOwnershipDtos.size());
-        verify(formOwnershipRepositoryMock,times(1)).findAll();
+        verify(formOwnershipRepositoryMock, times(1)).findAll();
 
     }
 
     @Test
     void testNotFoundAllFormOwnershipsFailure() {
 
-            doThrow(new RuntimeException())
-                    .when(formOwnershipRepositoryMock).findAll();
+        Mockito.when(formOwnershipRepositoryMock.findAll()).thenReturn(List.of());
 
         assertThrows(RuntimeException.class, () -> formOwnershipServiceImpl.findAllFormOwnerships());
         verify(formOwnershipRepositoryMock, times(1)).findAll();
-
 
 
     }

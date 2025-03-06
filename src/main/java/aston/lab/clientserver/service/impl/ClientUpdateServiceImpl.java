@@ -56,7 +56,7 @@ public class ClientUpdateServiceImpl implements ClientUpdateService {
             for (String telNumberString : telNumbers) {
                 TelNumber telNumber = new TelNumber();
                 telNumber.setNumber(telNumberString);
-                telNumber.setClientId(client);
+                telNumber.setClient(client);
                 client.getTelNumbers().add(telNumber);
             }
         }

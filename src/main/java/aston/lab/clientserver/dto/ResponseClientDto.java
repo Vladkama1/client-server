@@ -15,8 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseClientDto {
-    private Long inn;
-    private Long ogrn;
+    private String inn;
+    private String ogrn;
     private String formOwnershipId;
     private String fullNameClient;
     private String nameClient;

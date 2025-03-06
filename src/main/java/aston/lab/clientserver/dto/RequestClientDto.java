@@ -19,11 +19,11 @@ public class RequestClientDto {
 
     @NotNull
     @Schema(description = "ИНН клиента", example = "6321323773")
-    private Long inn;
+    private String inn;
 
     @NotNull
     @Schema(description = "ОГРН Клиента", example = "1136320021200")
-    private Long ogrn;
+    private String ogrn;
 
     @NotNull
     @Schema(description = "Идентификатор собственности клиента", example = "123e4567-e89b-12d3-a456-426614174000")

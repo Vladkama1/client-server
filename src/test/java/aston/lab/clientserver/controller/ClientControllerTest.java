@@ -2,6 +2,7 @@ package aston.lab.clientserver.controller;
 
 import aston.lab.clientserver.data.repository.ClientRepository;
 import aston.lab.clientserver.dto.responsedto.ClientFindByInnAndOgrnResponseDto;
+
 import aston.lab.clientserver.exception.CheckValidationException;
 import aston.lab.clientserver.exception.ClientNotFoundException;
 import aston.lab.clientserver.service.ClientService;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ClientController.class)
+@DisplayName("Модульное тестирование ClientController")
 public class ClientControllerTest {
     @Autowired
     MockMvc mockMvc;
@@ -101,6 +103,4 @@ public class ClientControllerTest {
 
         Mockito.verify(clientService, times(1)).findClientByInnAndOgrn(wrongInn, ogrn);
     }
-
-
 }

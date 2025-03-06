@@ -1,37 +1,36 @@
 package aston.lab.clientserver.data.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
+import jakarta.persistence.Column;
+import jakarta.persistence.GenerationType;
+
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-@Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder(toBuilder = true)
 @Table(name = "okved")
-public class Okved{
+@Entity
+@Data
+@NoArgsConstructor
+public class ClientOkveds {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
+    @NotNull
     private UUID id;
 
-    @Column(name = "code", length = 15, nullable = false)
+    @Column(name = "code", nullable = false)
+    @NotNull
     private String code;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
+    @NotNull
     private String name;
 
 }

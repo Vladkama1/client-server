@@ -2,28 +2,34 @@ include:
   - project: "Laboratory/Evergreen/DevOpsRepo"
     ref: main
     file:
+      - "Templates/testcontainers-template.yml"
       - "Templates/tests-jacoco-template.yml"
       - "Templates/tests-sonar-template.yml"
       - "Templates/kaniko-build-template.yml"
-
 
 stages:
   - test
   - build
   - deploy
 
+test-testcontainers:
+  extends: .test-testcontainers
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+
 Tests:
   stage: test
-  extends: .test-jacoco
+  extends: .test-jacoco 
+  needs:
+    - job: test-testcontainers # Используем шаблон Jacoco для тестов  # Выполняем только после завершения test-testcontainers
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 
 Tests:sonarqube:
   stage: test
-  extends: .test-sonar
+  extends: .test-sonar  # Используем шаблон SonarQube для анализа
   needs:
-    - job: Tests
-      artifacts: true
+    - job: Tests  # Выполняем только после завершения Tests
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
 

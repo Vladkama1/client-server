@@ -36,4 +36,5 @@ public class ClientRepresentativ {
 
     @Column(name = "email")
     private String email;
+
 }

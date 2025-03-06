@@ -40,7 +40,6 @@ dependencies {
   implementation 'io.micrometer:micrometer-core'
   runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
   runtimeOnly 'org.postgresql:postgresql'
-  implementation 'org.liquibase:liquibase-core'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
   implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -62,8 +61,21 @@ dependencyManagement {
   }
 }
 
-tasks.test {
-    useJUnitPlatform() 
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()  // Указываем использование JUnit для выполнения тестов
 }
+
+tasks.test {
+    finalizedBy jacocoTestReport  // ✅ Jacoco запускается ПОСЛЕ тестов, но не триггерит их
+}
+
+tasks.jacocoTestReport {
+    reports {
+        csv.required = false  // Не генерируем CSV отчёт
+        xml.required = true    // Генерируем XML отчёт
+        html.required = true   // Генерируем HTML отчёт
+    }
+}
+
 
 sonarqube {}

@@ -33,4 +33,5 @@ public class FormOwnership {
 
     @Column(name = "name")
     private String name;
+
 }

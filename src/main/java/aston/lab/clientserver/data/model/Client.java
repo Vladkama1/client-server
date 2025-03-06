@@ -2,9 +2,11 @@ package aston.lab.clientserver.data.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -23,6 +25,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,11 +53,11 @@ public class Client {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "inn")
-    private Long inn;
+    @Column(name = "inn", length = 12, nullable = false)
+    private String inn;
 
-    @Column(name = "ogrn")
-    private Long ogrn;
+    @Column(name = "ogrn", length = 15, nullable = false)
+    private String ogrn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "form_ownership_id", referencedColumnName = "id", nullable = false)
@@ -74,7 +77,7 @@ public class Client {
     @JoinColumn(name = "business_vol_id", referencedColumnName = "id", nullable = false)
     private BusinessVolume businessVolId;
 
-    @Column(name = "cur_acc_id")
+    @Column(name = "cur_acc_id", length = 20, nullable = false)
     private String curAccId;
 
     @Column(name = "address_legal")
@@ -88,7 +91,7 @@ public class Client {
     private UUID managerId;
 
     @Column(name = "revenue")
-    private BigDecimal revenue;
+    private Float revenue;
 
     @Column(name = "start_date")
     @CreationTimestamp

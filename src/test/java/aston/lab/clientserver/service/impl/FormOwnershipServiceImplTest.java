@@ -3,7 +3,7 @@ package aston.lab.clientserver.service.impl;
 import aston.lab.clientserver.data.repository.FormOwnershipRepository;
 import aston.lab.clientserver.dto.response.FormOwnershipDto;
 import aston.lab.clientserver.service.converter.FormOwnershipConverter;
-import aston.lab.clientserver.util.TestUtils;
+import aston.lab.clientserver.utility.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

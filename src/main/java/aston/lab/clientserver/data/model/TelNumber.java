@@ -14,12 +14,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
@@ -36,6 +38,5 @@ public class TelNumber {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
-    private Client clientId;
-
+    private Client client;
 }

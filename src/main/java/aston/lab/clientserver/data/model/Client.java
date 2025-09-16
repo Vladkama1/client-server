@@ -1,6 +1,5 @@
 package aston.lab.clientserver.data.model;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -20,7 +19,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +41,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
@@ -90,9 +94,11 @@ public class Client {
     private Float revenue;
 
     @Column(name = "start_date")
+    @CreationTimestamp
     private LocalDateTime startDate;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @Column(name = "employee_id", nullable = false)
@@ -103,8 +109,7 @@ public class Client {
 
     @Column(name = "is_active")
     private Boolean isActive;
-    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<TelNumber> telNumbers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "client")
+    private List<TelNumber> telNumbers;
 }

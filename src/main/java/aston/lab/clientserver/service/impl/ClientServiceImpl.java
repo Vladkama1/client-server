@@ -1,13 +1,28 @@
 package aston.lab.clientserver.service.impl;
 
+import aston.lab.clientserver.data.model.BusinessVolume;
 import aston.lab.clientserver.data.model.Client;
+import aston.lab.clientserver.data.model.ClientRepresentativ;
+import aston.lab.clientserver.data.model.FormOwnership;
+import aston.lab.clientserver.data.model.Okved;
+import aston.lab.clientserver.data.model.TelNumber;
+import aston.lab.clientserver.data.repository.BusinessVolumeRepository;
 import aston.lab.clientserver.data.repository.ClientRepository;
 import aston.lab.clientserver.dto.request.ActivationStatusRequest;
 import aston.lab.clientserver.dto.response.ActivationStatusResponse;
+import aston.lab.clientserver.data.repository.ClientRepresentativRepository;
+import aston.lab.clientserver.data.repository.FormOwnershipRepository;
+import aston.lab.clientserver.data.repository.OkvedRepository;
+import aston.lab.clientserver.dto.RequestClientDto;
+import aston.lab.clientserver.dto.ResponseClientDto;
+import aston.lab.clientserver.exception.NotFoundException;
+import aston.lab.clientserver.mapper.ClientMapper;
+import aston.lab.clientserver.mapper.TelNumberMapper;
 import aston.lab.clientserver.dto.responsedto.ClientFindByInnAndOgrnResponseDto;
 import aston.lab.clientserver.exception.CheckValidationException;
 import aston.lab.clientserver.exception.ClientNotFoundException;
 import aston.lab.clientserver.service.ClientService;
+import aston.lab.clientserver.service.TelNumberService;
 import aston.lab.clientserver.service.converter.ClientConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +32,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -24,7 +43,49 @@ import java.util.stream.Collectors;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final TelNumberService telNumberService;
+    private final BusinessVolumeRepository businessVolumeRepository;
+    private final ClientRepresentativRepository clientRepresentativRepository;
+    private final FormOwnershipRepository formOwnershipRepository;
+    private final OkvedRepository okvedRepository;
+    private final ClientMapper clientMapper;
+    private final TelNumberMapper telNumberMapper;
     private final ClientConverter clientConverter;
+
+
+    @Override
+    @Transactional
+    public ResponseClientDto saveClient(RequestClientDto requestClientDto, String requestEmployeeId) {
+        Client client = clientMapper.toEntity(requestClientDto);
+        Okved okved = okvedRepository.findById(UUID.fromString(requestClientDto.getOkvedId()))
+                .orElseThrow(() -> new NotFoundException("Okved not found"));
+        BusinessVolume businessVolume = businessVolumeRepository.findById(UUID.fromString(requestClientDto.getBusinessVolId()))
+                .orElseThrow(() -> new NotFoundException("BusinessVolume not found"));
+        ClientRepresentativ clientRepresentativ = clientRepresentativRepository.findById(UUID.fromString(requestClientDto.getClientRepresentativId()))
+                .orElseThrow(() -> new NotFoundException("ClientRepresentativ not found"));
+        FormOwnership formOwnership = formOwnershipRepository.findById(UUID.fromString(requestClientDto.getFormOwnershipId()))
+                .orElseThrow(() -> new NotFoundException("FormOwnership not found"));
+        Client newClient = client.toBuilder()
+                .formOwnershipId(formOwnership)
+                .clientRepresentativId(clientRepresentativ)
+                .okvedId(okved)
+                .businessVolId(businessVolume)
+                .employeeId(UUID.fromString(requestEmployeeId))
+                .isActive(true)
+                .build();
+        Client savedClient = clientRepository.save(newClient);
+        List<TelNumber> telNumbers = addAndGet(savedClient, requestClientDto.getTelNumber());
+
+        ResponseClientDto responseClientDto = clientMapper.toDto(savedClient);
+        responseClientDto.setTelNumber(requestClientDto.getTelNumber());
+        return responseClientDto;
+    }
+
+    private List<TelNumber> addAndGet(Client client, List<String> telNumbers) {
+        List<TelNumber> telNumberList = telNumberMapper.toListEntity(client, telNumbers);
+        log.info("telNumberList: {}", telNumberList.get(0));
+        return telNumberList.stream().map(telNumberService::saveTelNumber).toList();
+    }
 
     @Override
     public ClientFindByInnAndOgrnResponseDto findClientByInnAndOgrn(String inn, String ogrn) {
